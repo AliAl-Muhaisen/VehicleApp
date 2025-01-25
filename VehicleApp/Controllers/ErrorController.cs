@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using VehicleApp.Domain.Shared;
 
 namespace VehicleApp.Web.Controllers
 {
@@ -27,7 +28,27 @@ namespace VehicleApp.Web.Controllers
         }
         public IActionResult NotFound()
         {
-            return View("~/Views/Shared/Error.cshtml");
+            try
+            {
+                return View("~/Views/Shared/Error.cshtml");
+            }
+            catch (System.Exception)
+            {
+                return null;
+            }
+           
+        }
+        public IActionResult Custom(ErrorModel errorModel)
+        {
+            try
+            {
+                return View("~/Views/Shared/Error.cshtml", errorModel);
+            }
+            catch (System.Exception)
+            {
+                return null;
+            }
+
         }
     }
 }

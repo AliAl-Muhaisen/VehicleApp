@@ -1,0 +1,36 @@
+﻿@using VehicleApp.Domain.Shared
+@model IEnumerable<VehicleApp.Domain.Vehicle.VehicleModel>
+
+@{
+    ViewData["Title"] = "Model Details";
+}
+
+<h2>Model Details</h2>
+
+@if (Model == null || !Model.Any()) // Check if the model is null or empty
+{
+    <div class="alert alert-danger" role="alert">
+        No model details are available. Please check the parameters and try again.
+    </div>
+
+}
+else {
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Model ID</th>
+            <th>Model Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var vehicleModel in Model)
+        {
+            <tr>
+                <td>@vehicleModel.Model_ID</td>
+                <td>@vehicleModel.Model_Name</td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
+

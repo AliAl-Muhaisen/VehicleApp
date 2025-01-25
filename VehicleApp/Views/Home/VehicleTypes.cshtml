@@ -1,0 +1,25 @@
+﻿@model IEnumerable<VehicleApp.Domain.Vehicle.VehicleType>
+
+@{
+    ViewData["Title"] = "Vehicle Types";
+}
+
+<h2>Vehicle Types</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Vehicle Type ID</th>
+            <th>Vehicle Type Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var vehicleType in Model)
+        {
+                <tr>
+                <td>@vehicleType.VehicleTypeId</td>
+                <td>@vehicleType.VehicleTypeName</td>
+                </tr>
+        }
+    </tbody>
+</table>

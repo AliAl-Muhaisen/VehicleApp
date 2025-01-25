@@ -1,8 +1,184 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<VehicleApp.Domain.Vehicle.Make>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        .pagination {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .pagination button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            cursor: pointer;
+        }
+
+        .pagination button.active {
+            background-color: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+
+        .pagination button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+</style>
+@{
+    ViewData["Title"] = "Home - Vehicle Makes";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h2>Vehicle Makes</h2>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+
+@if (Model != null && Model.Any())
+{
+    @await Html.PartialAsync("_YearSelectionDialog")
+    <h1>Make List</h1>
+    <table id="make-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be dynamically populated -->
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <button id="prev-btn" disabled>&laquo; Previous</button>
+        <span id="page-info"></span>
+        <button id="next-btn">Next &raquo;</button>
+    </div>
+
+    <script>
+            // All data from the server
+            const makes = @Html.Raw(Json.Serialize(Model));
+        console.table(makes);
+        console.log(makes);
+            const rowsPerPage = 20;
+            let currentPage = 1;
+
+            function renderTable() {
+                const tableBody = document.querySelector('#make-table tbody');
+                tableBody.innerHTML = '';
+
+                // Calculate the range of rows to display
+                const start = (currentPage - 1) * rowsPerPage;
+                const end = start + rowsPerPage;
+                const paginatedData = makes.slice(start, end);
+
+                // Populate table rows
+                paginatedData.forEach(make => {
+                    const row = `<tr>
+                    <td>${make.make_ID}</td>
+                        <td>${make.make_Name}</td>
+                        <td>
+                        <a href="/Home/VehicleTypes?makeId=${make.make_ID}" class="btn btn-outline-warning btn-sm">
+                            Vehicle Types
+                        </a>
+                        <button type="button" class="btn btn-primary" onclick="openYearDialog(${make.make_ID}, '${make.make_Name}')">Model</button>
+                        </td>
+                    </tr>`;
+                    tableBody.innerHTML += row;
+                });
+
+                // Update pagination controls
+                document.getElementById('prev-btn').disabled = currentPage === 1;
+                document.getElementById('next-btn').disabled = currentPage * rowsPerPage >= makes.length;
+
+                // Update page info
+                document.getElementById('page-info').textContent = `Page ${currentPage} of ${Math.ceil(makes.length / rowsPerPage)}`;
+            }
+
+            // Event handlers for pagination
+            document.getElementById('prev-btn').addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTable();
+                }
+            });
+
+            document.getElementById('next-btn').addEventListener('click', () => {
+                if (currentPage * rowsPerPage < makes.length) {
+                    currentPage++;
+                    renderTable();
+                }
+            });
+
+            // Initial table render
+            renderTable();
+
+            // Example functions for actions
+            function selectYear(makeId) {
+                alert(`Select year for Make ID: ${makeId}`);
+            }
+
+            function viewVehicleType(makeId) {
+                alert(`View vehicle types for Make ID: ${makeId}`);
+            }
+    </script>
+
+    @* <table class="table table-bordered table-striped"> *@
+    @*     <thead> *@
+    @*         <tr> *@
+    @*             <th>Make ID</th> *@
+    @*             <th>Make Name</th> *@
+    @*             <th>Actions</th> *@
+    @*         </tr> *@
+    @*     </thead> *@
+    @*     <tbody> *@
+    @*         @foreach (var make in Model) *@
+    @*         { *@
+    @*             <tr> *@
+    @*                 <td>@make.Make_ID</td> *@
+    @*                 <td>@make.Make_Name</td> *@
+    @*                 <td> *@
+    @*                     <!-- Model Details Button --> *@
+    @*                     <a href="@Url.Action("ModelDetails", "Home", new { makeId = make.Make_ID,yearId=2010 })" class="btn btn-primary btn-sm"> *@
+    @*                         Model Details *@
+    @*                     </a> *@
+
+    @*                     <!-- Vehicle Types Button --> *@
+    @*                     <a href="@Url.Action("VehicleTypes", "Home", new { makeId = make.Make_ID })" class="btn btn-secondary btn-sm"> *@
+    @*                         Vehicle Types *@
+    @*                     </a> *@
+    @*                     <button type="button" onclick="openYearDialog(@make.Make_ID, '@make.Make_Name')">Select Year</button> *@
+
+    @*                 </td> *@
+    @*             </tr> *@
+    @*         } *@
+    @*     </tbody> *@
+    @* </table> *@
+
+}
+else
+{
+    <p>No makes data available.</p>
+}

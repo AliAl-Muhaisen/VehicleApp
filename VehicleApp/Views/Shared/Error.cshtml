@@ -1,8 +1,17 @@
-﻿@model ErrorViewModel
+﻿@model VehicleApp.Domain.Shared.ErrorModel
 @{
     ViewData["Title"] = "Error";
 }
-
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.Please try again later</h2>
-
+<div class="alert alert-danger">
+@if (Model == null || String.IsNullOrEmpty(Model.Title))
+{
+    <h1 class="text-danger">Error.</h1>
+    <h2 class="text-danger">An error occurred while processing your request.Please try again later</h2>
+}
+else {
+   
+        <h1 class="text-danger">Error - @Model.Title</h1>
+        <h2 class="text-danger">@Model.Message</h2>
+   
+}
+</div>
