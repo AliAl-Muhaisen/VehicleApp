@@ -43,11 +43,11 @@ namespace VehicleApp.Controllers
             }
 
         }
-        public async Task<IActionResult> ModelDetails(long makeId, int yearId)
+        public async Task<IActionResult> ModelDetails(long makeId, int selectedYear)
         {
             try
             {
-                var modelResponse = await _vehicleApiService.GetMakeModelsAsync(makeId,yearId);
+                var modelResponse = await _vehicleApiService.GetMakeModelsAsync(makeId, selectedYear);
 
                 if (modelResponse == null || !modelResponse.IsSuccess)
                 {
@@ -84,18 +84,6 @@ namespace VehicleApp.Controllers
                 _logger.LogError(ex.Message);
                 return RedirectToAction("Index", "Error", new { title = "Faild To Load Data", message = "The requested resource was not found." });
             }
-        }
-        [HttpPost]
-        public async Task<IActionResult> GetModels(int makeId, int selectedYear)
-        {
-            var modelsResponse = await _vehicleApiService.GetMakeModelsAsync(makeId, selectedYear);
-
-            if (!modelsResponse.IsSuccess)
-            {
-                return RedirectToAction("Error");
-            }
-
-            return View(modelsResponse.Results);
         }
         public IActionResult _YearSelectionDialog()
         {
