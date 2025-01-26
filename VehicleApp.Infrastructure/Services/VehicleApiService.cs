@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using VehicleApp.Domain.API;
 using VehicleApp.Domain.Interface;
 using VehicleApp.Domain.Vehicle;
+using VehicleApp.Helper;
 
 namespace VehicleApp.Infrastructure.Services
 {
@@ -21,9 +22,9 @@ namespace VehicleApp.Infrastructure.Services
             {
                 _httpClient = pHttpClient;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-               
+                Log.Error(ex);
             }
         }
 
@@ -39,8 +40,9 @@ namespace VehicleApp.Infrastructure.Services
                 return JsonSerializer.Deserialize<ApiResponse<Make>>(tContent);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Error(ex);
                 return null;
             }
         }
@@ -56,8 +58,9 @@ namespace VehicleApp.Infrastructure.Services
                 var tContent = await tResponse.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<ApiResponse<VehicleModel>>(tContent);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Error(ex);
                 return null;
             }
         }
@@ -72,8 +75,9 @@ namespace VehicleApp.Infrastructure.Services
                 var tContent = await tResponse.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<ApiResponse<VehicleType>>(tContent);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Error(ex);
                 return null;
             }
 

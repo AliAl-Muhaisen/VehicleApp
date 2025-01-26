@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\VehicleApp.Domain\VehicleApp.Domain.csproj" />
+    <ProjectReference Include="..\VehicleApp.Helper\VehicleApp.Helper.csproj" />
   </ItemGroup>
 
 </Project>

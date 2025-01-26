@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using VehicleApp.Domain.Interface;
 using VehicleApp.Domain.Shared;
 using VehicleApp.Domain.Vehicle;
+using VehicleApp.Helper;
 using VehicleApp.Infrastructure.Services;
 
 namespace VehicleApp.Controllers
@@ -38,7 +39,7 @@ namespace VehicleApp.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                Log.Error(ex);
                 return RedirectToAction("Custom", "Error", new ErrorModel{ Title = "Faild To Load Data", Message = "The requested resource was not found." });
             }
 
@@ -60,7 +61,7 @@ namespace VehicleApp.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                Log.Error(ex);
                 return RedirectToAction("Index", "Error", new { title = "Faild To Load Data", message = "The requested resource was not found." });
             }
         }
@@ -81,7 +82,7 @@ namespace VehicleApp.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                Log.Error(ex);
                 return RedirectToAction("Index", "Error", new { title = "Faild To Load Data", message = "The requested resource was not found." });
             }
         }
@@ -91,14 +92,24 @@ namespace VehicleApp.Controllers
             {
                 return PartialView("_YearSelectionDialog");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Error(ex);
                 return RedirectToAction("Index", "Error", new { title = "Faild To Load Componenet", message = "Something went wrong please try again later" });
             }
         }
         public IActionResult Privacy()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex);
+                return RedirectToAction("Index", "Error", new { title = "Faild To Load Componenet", message = "Something went wrong please try again later" });
+            }
+
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

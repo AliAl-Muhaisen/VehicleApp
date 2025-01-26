@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using VehicleApp.Domain.Shared;
+using VehicleApp.Helper;
 
 namespace VehicleApp.Web.Controllers
 {
@@ -20,8 +22,9 @@ namespace VehicleApp.Web.Controllers
                 return View("~/Views/Shared/Error.cshtml");
 
             }
-            catch (System.Exception)
+            catch (Exception ex)
             {
+                Log.Error(ex);
                 return null;
             }
 
@@ -32,8 +35,9 @@ namespace VehicleApp.Web.Controllers
             {
                 return View("~/Views/Shared/Error.cshtml");
             }
-            catch (System.Exception)
+            catch (Exception ex)
             {
+                Log.Error(ex);
                 return null;
             }
            
@@ -44,8 +48,9 @@ namespace VehicleApp.Web.Controllers
             {
                 return View("~/Views/Shared/Error.cshtml", errorModel);
             }
-            catch (System.Exception)
+            catch (Exception ex)
             {
+                Log.Error(ex);
                 return null;
             }
 
