@@ -5,21 +5,29 @@
 }
 
 <h2>Vehicle Types</h2>
+@if (Model == null || !Model.Any()) // Check if the model is null or empty
+{
+    <div class="alert alert-danger" role="alert">
+        No Types details are available. Please check the make id or try again.
+    </div>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Vehicle Type ID</th>
-            <th>Vehicle Type Name</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var vehicleType in Model)
-        {
+}
+else {
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Vehicle Type ID</th>
+                <th>Vehicle Type Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var vehicleType in Model)
+            {
                 <tr>
-                <td>@vehicleType.VehicleTypeId</td>
-                <td>@vehicleType.VehicleTypeName</td>
+                    <td>@vehicleType.VehicleTypeId</td>
+                    <td>@vehicleType.VehicleTypeName</td>
                 </tr>
-        }
-    </tbody>
-</table>
+            }
+        </tbody>
+    </table>
+}

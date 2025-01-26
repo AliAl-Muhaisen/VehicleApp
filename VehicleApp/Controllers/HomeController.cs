@@ -13,6 +13,10 @@ using VehicleApp.Infrastructure.Services;
 
 namespace VehicleApp.Controllers
 {
+
+    /// <summary>
+    /// The HomeController handles requests related to vehicle data, such as makes, models, and types, 
+    /// </summary>
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -23,6 +27,10 @@ namespace VehicleApp.Controllers
             _vehicleApiService = vehicleApiService;
         }
 
+        /// <summary>
+        /// Handles requests to the home page and retrieves a list of vehicle makes to display.
+        /// </summary>
+        /// <returns>The Index view with a list of vehicle makes or an error message if the data could not be loaded.</returns>
         public async Task<IActionResult> Index()
         {
             try
@@ -30,7 +38,6 @@ namespace VehicleApp.Controllers
                 var makesResponse = await _vehicleApiService.GetMakesAsync();
                 if (makesResponse == null || !makesResponse.IsSuccess)
                 {
-                    // Handle error (optional)
                     ViewBag.ErrorMessage = "Something went wrong, Please try again";
                     return View(new List<Make>());
                 }
@@ -44,6 +51,12 @@ namespace VehicleApp.Controllers
             }
 
         }
+        /// <summary>
+        /// Retrieves the models of a specific make and year to display their details.
+        /// </summary>
+        /// <param name="makeId">The ID of the selected vehicle make.</param>
+        /// <param name="selectedYear">The year of the vehicle models to retrieve.</param>
+        /// <returns>The ModelDetails view with a list of vehicle models or an error message if data could not be loaded.</returns>
         public async Task<IActionResult> ModelDetails(long makeId, int selectedYear)
         {
             try
@@ -52,19 +65,22 @@ namespace VehicleApp.Controllers
 
                 if (modelResponse == null || !modelResponse.IsSuccess)
                 {
-                    // Handle error (optional)
-                    ViewBag.ErrorMessage = "Something went wrong, Please try again";
-                    TempData["ErrorMessage"] = modelResponse.Message;
-                    return View(new List<VehicleModel>());
+                    return RedirectToAction("Custom", "Error", new ErrorModel { Title = "Faild To Load Data", Message = "Something went wrong, Please try again" });
                 }
                 return View(modelResponse.Results);
             }
             catch (Exception ex)
             {
                 Log.Error(ex);
-                return RedirectToAction("Index", "Error", new { title = "Faild To Load Data", message = "The requested resource was not found." });
+                return RedirectToAction("Custom", "Error", new ErrorModel { Title = "Faild To Load Data", Message = "The requested resource was not found." });
             }
         }
+
+        /// <summary>
+        /// Retrieves the types of vehicles for a specific make to display their details.
+        /// </summary>
+        /// <param name="makeId">The ID of the selected vehicle make.</param>
+        /// <returns>The VehicleTypes view with a list of vehicle types or an error message if data could not be loaded.</returns>
         public async Task<IActionResult> VehicleTypes(long makeId)
         {
             try
@@ -73,17 +89,14 @@ namespace VehicleApp.Controllers
 
                 if (typesResponse == null || !typesResponse.IsSuccess)
                 {
-                    // Handle error (optional)
-                    ViewBag.ErrorMessage = "Something went wrong, Please try again";
-                    TempData["ErrorMessage"] = typesResponse.Message;
-                    return View(new List<VehicleModel>());
+                    return RedirectToAction("Custom", "Error", new ErrorModel{ Title = "Faild To Load Data", Message = "Something went wrong, Please try again" });
                 }
                 return View(typesResponse.Results);
             }
             catch (Exception ex)
             {
                 Log.Error(ex);
-                return RedirectToAction("Index", "Error", new { title = "Faild To Load Data", message = "The requested resource was not found." });
+                return RedirectToAction("Custom", "Error", new ErrorModel { Title = "Faild To Load Data", Message = "The requested resource was not found." });
             }
         }
         public IActionResult _YearSelectionDialog()
@@ -95,7 +108,7 @@ namespace VehicleApp.Controllers
             catch (Exception ex)
             {
                 Log.Error(ex);
-                return RedirectToAction("Index", "Error", new { title = "Faild To Load Componenet", message = "Something went wrong please try again later" });
+                return RedirectToAction("Custom", "Error", new ErrorModel { Title = "Faild To Load Data", Message = "The requested resource was not found." });
             }
         }
         public IActionResult Privacy()
@@ -107,7 +120,7 @@ namespace VehicleApp.Controllers
             catch (Exception ex)
             {
                 Log.Error(ex);
-                return RedirectToAction("Index", "Error", new { title = "Faild To Load Componenet", message = "Something went wrong please try again later" });
+                return RedirectToAction("Custom", "Error", new ErrorModel { Title = "Faild To Load Data", Message = "The requested resource was not found." });
             }
 
         }

@@ -12,10 +12,15 @@ using VehicleApp.Helper;
 
 namespace VehicleApp.Infrastructure.Services
 {
+    /// <summary>
+    /// Service class to interact with the Vehicle API. 
+    /// Provides methods to retrieve vehicle makes, models, and types.
+    /// </summary>
     public class VehicleApiService: IVehicleApiService
     {
         private readonly HttpClient _httpClient;
 
+      
         public VehicleApiService(HttpClient pHttpClient)
         {
             try
@@ -28,7 +33,11 @@ namespace VehicleApp.Infrastructure.Services
             }
         }
 
-       
+        /// <summary>
+        /// Retrieves a list of all vehicle makes.
+        /// </summary>
+        /// <returns>An <see cref="ApiResponse{Make}"/> containing the list of makes, or null if an error occurs.</returns>
+
         public async Task<ApiResponse<Make>> GetMakesAsync()
         {
             try
@@ -47,6 +56,12 @@ namespace VehicleApp.Infrastructure.Services
             }
         }
 
+        /// <summary>
+        /// Retrieves a list of models for a specific vehicle make and year.
+        /// </summary>
+        /// <param name="makeId">The ID of the vehicle make.</param>
+        /// <param name="year">The year of the vehicle models.</param>
+        /// <returns>An <see cref="ApiResponse{VehicleModel}"/> containing the list of models, or null if an error occurs.</returns>
         public async Task<ApiResponse<VehicleModel>> GetMakeModelsAsync(long makeId, int year)
         {
       
@@ -64,6 +79,12 @@ namespace VehicleApp.Infrastructure.Services
                 return null;
             }
         }
+
+        /// <summary>
+        /// Retrieves the types of vehicles for a specific vehicle make.
+        /// </summary>
+        /// <param name="makeId">The ID of the vehicle make.</param>
+        /// <returns>An <see cref="ApiResponse{VehicleType}"/> containing the list of vehicle types, or null if an error occurs.</returns>
 
         public async Task<ApiResponse<VehicleType>> GetMakeVehicleTypeAsync(long makeId)
         {
